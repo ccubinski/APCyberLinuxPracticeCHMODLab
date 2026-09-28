@@ -32,10 +32,8 @@ token = hashlib.sha256(raw_data.encode()).hexdigest()[:8].upper()
 # 3. Write challenge content
 with open(file_path, "w") as f:
     f.write(f"=== CHMOD LAB FOR USER: {username} ===\n")
-    f.write("Task 1 (Read): You successfully unlocked this file!\n")
-    f.write(f"Your unique completion token is: {token}\n\n")
-    f.write("Task 2 (Write): Append the exact line below to the end of this file:\n")
-    f.write(f"COMPLETED: {username} - {token}\n")
+    f.write("SUCCESS: You unlocked and read the file!\n")
+    f.write(f"Your unique completion token is: {token}\n")
 
 # 4. Save metadata for verification
 with open(meta_file, "w") as f:
@@ -45,4 +43,4 @@ with open(meta_file, "w") as f:
 os.chmod(file_path, 0o000)
 
 print(f"\nLab setup complete for '{username}' on IP {student_ip}.")
-print(f"'{file_path}' created with 000 permissions. Use chmod to proceed.")
+print(f"'{file_path}' created with 000 permissions. Use chmod to unlock read access.")
