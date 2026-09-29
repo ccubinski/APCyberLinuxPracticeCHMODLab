@@ -1,46 +1,36 @@
 import os
 import socket
-import hashlib
 
-SECRET_SALT = "CS101_Fall2026_Key"
 file_path = "challenge.txt"
 meta_file = ".student_id"
 
-def get_ip():
-    """Detects the active network IP of the VM."""
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    try:
-        s.connect(('8.8.8.8', 80))
-        ip = s.getsockname()[0]
-    except Exception:
-        ip = '127.0.0.1'
-    finally:
-        s.close()
-    return ip
-
 # 1. Prompt for student identifier
-username = input("Enter your student username or ID: ").strip().lower()
+username = input("Enter your GNPS Username: ").strip().lower()
 if not username:
     print("Error: Username cannot be empty.")
     exit(1)
 
-# 2. Get current VM IP address and calculate unique hash
-student_ip = get_ip()
-raw_data = f"{username}:{student_ip}:{SECRET_SALT}"
-token = hashlib.sha256(raw_data.encode()).hexdigest()[:8].upper()
-
-# 3. Write challenge content
-with open(file_path, "w") as f:
-    f.write(f"=== CHMOD LAB FOR USER: {username} ===\n")
-    f.write("SUCCESS: You unlocked and read the file!\n")
-    f.write(f"Your unique completion token is: {token}\n")
-
-# 4. Save metadata for verification
+# 2. Save metadata for verification script
 with open(meta_file, "w") as f:
     f.write(f"{username}\n")
 
-# 5. Lock permissions completely (000)
+# 3. Write target permission instructions inside challenge.txt
+with open(file_path, "w") as f:
+    f.write(f"=== CHMOD LAB FOR USER: {username} ===\n\n")
+    f.write("STEP 1 COMPLETE: You successfully figured out how to read this file!\n\n")
+    f.write("STEP 2 TASK:\n")
+    f.write("Modify the permissions of 'challenge.txt' to match these exact settings:\n")
+    f.write("  - Owner (User): Read, Write, Execute\n")
+    f.write("  - Group:        Read, Write\n")
+    f.write("  - Others:       Read Only\n\n")
+    f.write("Once you set the correct permissions for 'challenge.txt', run:\n")
+    f.write("  ./check_solution\n")
+
+# 4. Lock file down completely (000 permissions)
 os.chmod(file_path, 0o000)
 
-print(f"\nLab setup complete for '{username}' on IP {student_ip}.")
-print(f"Find the file that was created. You must give this file user read access only. Then, use \"check_solution\" to verify.")
+print(f"\nLab initialized for '{username}'.")
+print("------------------------------------------------------------------")
+print("Challenge started: 'challenge.txt' has been created with NO permissions.")
+print("Figure out how to grant yourself read access to view the file contents!")
+print("------------------------------------------------------------------")
