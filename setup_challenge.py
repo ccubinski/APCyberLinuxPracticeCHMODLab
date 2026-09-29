@@ -43,4 +43,4 @@ with open(meta_file, "w") as f:
 os.chmod(file_path, 0o000)
 
 print(f"\nLab setup complete for '{username}' on IP {student_ip}.")
-print(f"'{file_path}' created with 000 permissions. Use chmod to unlock read access.")
+print(f"Find the file that was created. You must give this file user read access only. Then, use \"check_solution\" to verify.")
